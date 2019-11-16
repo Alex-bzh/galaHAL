@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>galaHAL</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <h1 class="">{{ author }}</h1>
+            <nav class="nav nav-tabs">
+                <a class="nav-item nav-link active" href="#">Tous</a>
+                <!--
+                <a class="nav-item nav-link" href="#">Article</a>
+                <a class="nav-item nav-link" href="#">Chapitre</a>
+                <a class="nav-item nav-link" href="#">Ouvrage</a>
+                <a class="nav-item nav-link" href="#">Communication</a>
+                <a class="nav-item nav-link" href="#">Direction d’ouvrage</a>
+                <a class="nav-item nav-link" href="#">Poster</a>
+                <a class="nav-item nav-link" href="#">Autre</a>
+                -->
+            </nav>
+            <div class="row">
+                <div class="col">
+                    <ul>
+                        <li v-for="doc in docs">{{ decodeHtml(doc.label_s) }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/vuejs/vue.min.js"></script>
+    <script src="assets/jquery/jquery-3.4.1.min.js"></script>
+    <script src="assets/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
