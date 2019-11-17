@@ -17,7 +17,8 @@ let app = new Vue({
         idHal: config.idHal,
         firstName: null,
         lastName: null,
-        docs: null
+        docs: null,
+        nbDocs: Object()
     },
     mounted: function() {
         // Fetches the details of an author
@@ -77,7 +78,10 @@ let app = new Vue({
             // Fetch API to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
-                .then(data => this.docs = data.response.docs)
+                .then(data => {
+                    this.docs = data.response.docs
+                    this.nbDocs.all = data.response.numFound
+                })
             ;
         }
     }
