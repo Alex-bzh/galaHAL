@@ -7,7 +7,7 @@
 */
 const config = {
     lab: 'LLF',                 // Leave empty for listing all the publications
-    idHal: 'alexandre-roulois'
+    idHal: 'obonami'
 }
 // App galaHAL
 let app = new Vue({
@@ -39,6 +39,12 @@ let app = new Vue({
     },
     methods: {
         /*
+        *   Decodes HTML entities
+        */
+        decodeHtml: function(html) {
+            return $('<div>').html(html).text();
+        },
+        /*
         *   Retrieves the first and last names of an author.
         */
         fetchAuthor: function() {
@@ -67,18 +73,12 @@ let app = new Vue({
             // HAL API: bibliographical references
             let url = 'https://api.archives-ouvertes.fr/search/';
             // Builds the query
-            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&rows=500&wt=json`;
+            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,label_s&rows=500&wt=json`;
             // Fetch API to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
                 .then(data => this.docs = data.response.docs)
             ;
-        },
-        /*
-        *   Decodes HTML entities
-        */
-        decodeHtml: function(html) {
-            return $('<div>').html(html).text();
         }
     }
 })

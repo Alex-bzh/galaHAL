@@ -25,7 +25,10 @@
             <div class="row">
                 <div class="col">
                     <ul>
-                        <li v-for="doc in docs">{{ decodeHtml(doc.label_s) }}</li>
+                        <li v-for="doc in docs">
+                            <a :href="`https://hal.archives-ouvertes.fr/${doc.halId_s}`" target="_blank">{{ doc.halId_s }}</a>
+                            {{ decodeHtml(doc.label_s) }}
+                        </li>
                     </ul>
                 </div>
             </div>
