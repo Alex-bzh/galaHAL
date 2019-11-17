@@ -9,19 +9,8 @@
 <body>
     <div id="app">
         <div class="container">
-            <h1 class="">{{ author }}</h1>
-            <nav class="nav nav-tabs">
-                <a class="nav-item nav-link active" href="#">Tous ({{ nbDocs.all }})</a>
-                <!--
-                <a class="nav-item nav-link" href="#">Article</a>
-                <a class="nav-item nav-link" href="#">Chapitre</a>
-                <a class="nav-item nav-link" href="#">Ouvrage</a>
-                <a class="nav-item nav-link" href="#">Communication</a>
-                <a class="nav-item nav-link" href="#">Direction d’ouvrage</a>
-                <a class="nav-item nav-link" href="#">Poster</a>
-                <a class="nav-item nav-link" href="#">Autre</a>
-                -->
-            </nav>
+            <author></author>
+            <navigation :nb-docs="nbDocs"></navigation>
             <div class="row">
                 <div class="col">
                     <ul>
@@ -37,6 +26,9 @@
     <script src="assets/vuejs/vue.min.js"></script>
     <script src="assets/jquery/jquery-3.4.1.min.js"></script>
     <script src="assets/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="config.js"></script>
+    <script src="components/author.js"></script>
+    <script src="components/navigation.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
