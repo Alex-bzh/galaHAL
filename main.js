@@ -6,8 +6,8 @@
 *       - idHal: a unique idHal
 */
 const config = {
-    lab: 'LLF',
-    idHal: 'alexandre-roulois'
+    lab: 'LLF',                 // Leave empty for listing all the publications
+    idHal: 'obonami'
 }
 // App galaHAL
 let app = new Vue({
@@ -17,7 +17,8 @@ let app = new Vue({
         idHal: config.idHal,
         firstName: null,
         lastName: null,
-        docs: null
+        docs: null,
+        nbDocs: Object()
     },
     mounted: function() {
         // Fetches the details of an author
@@ -32,10 +33,18 @@ let app = new Vue({
         *   and the lab between parenthesis.
         */
         author: function() {
-            return this.firstName + ' ' + this.lastName + ' (' + this.lab + ')';
+            // If this.lab is empty, do not print the acronym
+            let lab = (this.lab) ? ` (${this.lab})` : '';
+            return `${this.firstName} ${this.lastName}${lab}`;
         }
     },
     methods: {
+        /*
+        *   Decodes HTML entities
+        */
+        decodeHtml: function(html) {
+            return $('<div>').html(html).text();
+        },
         /*
         *   Retrieves the first and last names of an author.
         */
@@ -43,7 +52,7 @@ let app = new Vue({
             // HAL API: author repository
             let url = 'https://api.archives-ouvertes.fr/ref/author/';
             // Builds the query
-            let query = '?&q=idHal_s:' + this.idHal + '&fl=firstName_s,lastName_s&rows=1&wt=json';
+            let query = `?&q=idHal_s:${this.idHal}&fl=firstName_s,lastName_s&rows=1&wt=json`;
             // Uses Fetch APi to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
@@ -56,24 +65,24 @@ let app = new Vue({
             ;
         },
         /*
-        *   Retrieves the docs written by an author
+        *   Retrieves the docs written by an author.
+        *   If the parameter this.lab is not empty,
+        *   the list is restricted to publications
+        *   affiliated with the lab.
         */
         fetchDocs: function() {
             // HAL API: bibliographical references
             let url = 'https://api.archives-ouvertes.fr/search/';
             // Builds the query
-            let query = this.lab + '/?q=authIdHal_s:' + this.idHal + '&rows=500&wt=json';
+            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,label_s&rows=500&wt=json`;
             // Fetch API to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
-                .then(data => this.docs = data.response.docs)
+                .then(data => {
+                    this.docs = data.response.docs
+                    this.nbDocs.all = data.response.numFound
+                })
             ;
-        },
-        /*
-        *   Decodes HTML entities
-        */
-        decodeHtml: function(html) {
-            return $('<div>').html(html).text();
         }
     }
 })
