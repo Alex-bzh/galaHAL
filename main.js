@@ -4,9 +4,17 @@ let app = new Vue({
     data: {
         lab: config.lab,
         idHal: config.idHal,
+        docTypes: ['ART', 'COUV', 'OUV', 'COMM', 'DOUV'],
         docs: null,
+        selectedDocs: null,
         nbDocs: {
-            all: 0
+            all: 0,
+            art: 0,
+            couv: 0,
+            ouv: 0,
+            comm: 0,
+            douv: 0,
+            other: 0
         }
     },
     components: {
@@ -34,15 +42,50 @@ let app = new Vue({
             // HAL API: bibliographical references
             let url = 'https://api.archives-ouvertes.fr/search/';
             // Builds the query
-            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,docType_s,label_s&rows=500&wt=json`;
+            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,docType_s,label_s&facet=true&facet.field=docType_s&rows=500&wt=json`;
             // Fetch API to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
                 .then(data => {
-                    this.docs = data.response.docs,
-                    this.nbDocs.all = data.response.numFound
+                    this.docs = data.response.docs;                             // All the docs
+                    this.selectedDocs = this.docs;
+                    let docTypes = data.facet_counts.facet_fields.docType_s;    // All the doctypes
+                    // Number of docs for each doctype
+                    for (var i = this.docTypes.length - 1; i >= 0; i--) {
+                        let idx = docTypes.indexOf(this.docTypes[i]);
+                        this.nbDocs[this.docTypes[i].toLowerCase()] = docTypes[idx+1];
+                    }
+                    this.nbDocs.all = data.response.numFound;
+                    this.nbDocs.other = this.nbDocs.all - (this.nbDocs.art + this.nbDocs.couv + this.nbDocs.ouv + this.nbDocs.comm + this.nbDocs.douv);
                 })
             ;
+        },
+        /*
+        *   Filters the docs by type
+        *   @param {String} docType: the type of the documents
+        */
+        filterDocs: function(docType = '') {
+            // If param is empty, displays all the docs
+            if (!docType) {
+                this.selectedDocs = this.docs;
+            }
+            // If param is one of the docTypes
+            else if (this.docTypes.indexOf(docType) != -1) {
+                // Displays the corresponding documents
+                this.selectedDocs = this.docs.filter(function(doc) {
+                    return doc.docType_s == docType;
+                });
+            }
+            // Otherwise, displays all the docs which typeDoc is not in this.docTypes
+            else {
+                this.selectedDocs = this.docs.filter(function(doc) {
+                    return doc.docType_s != 'ART'
+                        && doc.docType_s != 'COMM'
+                        && doc.docType_s != 'COUV'
+                        && doc.docType_s != 'OUV'
+                        && doc.docType_s != 'DOUV';
+                });
+            }
         }
     }
 })
