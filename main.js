@@ -7,6 +7,7 @@ let app = new Vue({
         docTypes: ['ART', 'COUV', 'OUV', 'COMM', 'DOUV'],
         docs: null,
         selectedDocs: null,
+        pubDates: Array(),
         nbDocs: {
             all: 0,
             art: 0,
@@ -19,19 +20,14 @@ let app = new Vue({
     },
     components: {
         'author': authorCmpnt,
-        'navigation': navCmpnt
+        'navigation': navCmpnt,
+        'references': refCmpnt
     },
     mounted: function() {
         // Fetches the docs written by the author
         this.fetchDocs();
     },
     methods: {
-        /*
-        *   Decodes HTML entities
-        */
-        decodeHtml: function(html) {
-            return $('<div>').html(html).text();
-        },
         /*
         *   Retrieves the docs written by an author.
         *   If the parameter this.lab is not empty,
@@ -42,21 +38,18 @@ let app = new Vue({
             // HAL API: bibliographical references
             let url = 'https://api.archives-ouvertes.fr/search/';
             // Builds the query
-            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,docType_s,label_s,producedDate_tdate&facet=true&facet.field=docType_s&rows=500&wt=json&sort=producedDate_tdate desc`;
+            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,docType_s,label_s,producedDate_tdate&facet=true&facet.field=docType_s&rows=500&wt=json&sort=producedDate_tdate+desc`;
             // Fetch API to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
                 .then(data => {
-                    this.docs = data.response.docs;                             // All the docs
-                    this.selectedDocs = this.docs;
-                    let docTypes = data.facet_counts.facet_fields.docType_s;    // All the doctypes
-                    // Number of docs for each doctype
-                    for (var i = this.docTypes.length - 1; i >= 0; i--) {
-                        let idx = docTypes.indexOf(this.docTypes[i]);
-                        this.nbDocs[this.docTypes[i].toLowerCase()] = docTypes[idx+1];
-                    }
-                    this.nbDocs.all = data.response.numFound;
-                    this.nbDocs.other = this.nbDocs.all - (this.nbDocs.art + this.nbDocs.couv + this.nbDocs.ouv + this.nbDocs.comm + this.nbDocs.douv);
+                    this.docs = data.response.docs;     // All the docs
+                    this.selectedDocs = this.docs;      // Working copy of the docs
+                    this.setPubDates();                 // All the publication dates
+                    this.nbDocsByType(                  // Number of docs for each doctype
+                        data.facet_counts.facet_fields.docType_s,
+                        data.response.numFound
+                    );
                 })
             ;
         },
@@ -85,6 +78,35 @@ let app = new Vue({
                         && doc.docType_s != 'OUV'
                         && doc.docType_s != 'DOUV';
                 });
+            }
+        },
+        /*
+        *   Counts the number of docs for each type of doc
+        *   @param {Array} docTypes: all the possible doctypes
+        *   @param {Number} nbDocs: number of documents found
+        */
+        nbDocsByType: function(docTypes, nbDocs) {
+            // For each doctype…
+            for (var i = this.docTypes.length - 1; i >= 0; i--) {
+                // … captures the index of the listed doctypes in the data
+                let idx = docTypes.indexOf(this.docTypes[i]);
+                // The next index is the proper count
+                this.nbDocs[this.docTypes[i].toLowerCase()] = docTypes[idx + 1];
+            }
+            // Counts the other categories of documents : all, other
+            this.nbDocs.all = nbDocs;
+            this.nbDocs.other = this.nbDocs.all - (this.nbDocs.art + this.nbDocs.couv + this.nbDocs.ouv + this.nbDocs.comm + this.nbDocs.douv);
+        },
+        /*
+        *   Fills the data with the different publication dates
+        */
+        setPubDates: function() {
+            // For each pubdate…
+            for (var i = this.docs.length - 1; i >= 0; i--) {
+                // … captures the year (first four numbers)
+                let pubdate = this.docs[i].producedDate_tdate.match(/^[0-9]{4}/)[0];
+                // Appends the result to the data
+                this.pubDates.push(pubdate);
             }
         }
     }
