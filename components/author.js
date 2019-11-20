@@ -3,8 +3,13 @@ let authorCmpnt = {
 	template: `
         <nav class="navbar navbar-light">
             <a class="navbar-brand" :href="halUrl" target="_blank">{{ author }}</a>
+            <search @keyword="queryDocs"></search>
         </nav>
 	`,
+    components: {
+        'search': searchCmpnt
+    }
+    ,
 	mounted: function() {
         // Fetches the details of an author
         this.fetchAuthor();
@@ -14,7 +19,7 @@ let authorCmpnt = {
 			idHal: config.idHal,
 			lab: config.lab,
         	firstName: null,
-        	lastName: null,
+        	lastName: null
 		}
 	},
     computed: {
@@ -60,6 +65,13 @@ let authorCmpnt = {
                     this.lastName = data.response.docs[0].lastName_s
                 })
             ;
+        },
+        /*
+        *   Transmits the keyword to the main component
+        */
+        queryDocs: function(keyword) {
+            // An event called query-docs will look for the documents
+            this.$emit('query-docs', keyword);
         }
 	}
 }
