@@ -6,7 +6,8 @@ let app = new Vue({
         idHal: config.idHal,
         docTypes: ['ART', 'COUV', 'OUV', 'COMM', 'DOUV'],
         docs: null,
-        selectedDocs: null,
+        selectedDocs: '',
+        selectedDocType: '',
         pubDates: Array(),
         nbDocs: {
             all: 0,
@@ -58,6 +59,8 @@ let app = new Vue({
         *   @param {String} docType: the type of the documents
         */
         filterDocs: function(docType = '') {
+            // Fixes the actual doctype
+            this.selectedDocType = (docType) ? docType : '';
             // If param is empty, displays all the docs
             if (!docType) {
                 this.selectedDocs = this.docs;
@@ -108,6 +111,28 @@ let app = new Vue({
                 // Appends the result to the data
                 this.pubDates.push(pubdate);
             }
+        },
+        /*
+        *   Triggers a search in the selected documents
+        *   @param {String} keyword: the keyword to search in the docs
+        */
+        search: function(keyword) {
+            // Limits the search to the documents filtered by type
+            this.filterDocs(this.selectedDocType);
+            // Keyword to lowercase
+            let search = keyword.toLowerCase();
+            // Dynamic selection of documents depending on the keyword
+            this.selectedDocs = this.selectedDocs.filter(
+                function(doc) {
+                    // Field label to lowercase
+                    let label = doc.label_s.toLowerCase();
+                    // If the keyword is in the field label
+                    if (label.indexOf(search) >= 0) {
+                        // Returning the current doc
+                        return doc;
+                    }
+                }
+            );
         }
     }
 })
