@@ -1,7 +1,9 @@
 // author.js
 let authorCmpnt = {
 	template: `
-		<h1>{{ author }}</h1>
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" :href="halUrl" target="_blank">{{ author }}</a>
+        </nav>
 	`,
 	mounted: function() {
         // Fetches the details of an author
@@ -24,6 +26,19 @@ let authorCmpnt = {
             // If this.lab is empty, do not print the acronym
             let lab = (this.lab) ? ` (${this.lab})` : '';
             return `${this.firstName} ${this.lastName}${lab}`;
+        },
+        /*
+        *   Short function to return the public URL to one repository on HAL
+        */
+        halUrl: function() {
+            // The public URL
+            let url = `https://hal.archives-ouvertes.fr/search/index/?`;
+            // The query is based on the idHAL of an author
+            let queryAuth = `qa[authIdHal_s][]=${this.idHal}`;
+            // And optionnaly also on a collection
+            let queryLab = (this.lab) ? `&qa[collCode_s][]=${this.lab}` : '';
+            // The computed URL
+            return url + queryAuth + queryLab;
         }
     },
 	methods: {
