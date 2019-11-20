@@ -5,6 +5,6 @@
 *       - idHal: a unique idHal
 */
 const config = {
-    idHal: 'obonami',
+    idHal: 'alexandre-roulois',
     lab: 'LLF'                 // Leave empty for listing all the publications
 }
