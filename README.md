@@ -13,8 +13,8 @@ galaHAL provides an access to ones bibliographic references registered in HAL. T
 
 ## Configuration
 galaHAL is easy to configure. The file *config.js* at the root contains a small object with two keys:
-- idHal: a unique HAL identifier, known as [idHAL](https://doc.archives-ouvertes.fr/identifiant-auteur-idhal-cv/)
-- lab: the acronym of a structure, which you can find on the [*ad hoc* repository](https://api.archives-ouvertes.fr/ref/structure/?q=LLF&fl=acronym_s)
+- *idHal* (required): a unique HAL identifier, known as [idHAL](https://doc.archives-ouvertes.fr/identifiant-auteur-idhal-cv/)
+- *lab* (optional): the acronym of a structure, which you can find on the [*ad hoc* repository](https://api.archives-ouvertes.fr/ref/structure/?q=LLF&fl=acronym_s). If you leave this key empty, galaHAL will fetch all your publications and not only the ones affected to a declared structure.
 
 ## Coming features
 - direct access to documents when available
