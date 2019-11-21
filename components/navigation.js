@@ -7,7 +7,7 @@ let navCmpnt = {
         }
     },
     template: `
-        <nav class="nav nav-tabs" id="docTypesTab" role="tablist">
+        <nav class="nav nav-tabs my-2" id="docTypesTab" role="tablist">
             <a class="nav-item nav-link active" role="tab" id="all-tab" href="#all"
                 v-show="nbDocs.all"
                 @click="filterTypeDoc()">
