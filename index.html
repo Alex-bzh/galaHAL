@@ -10,13 +10,25 @@
 <body>
     <div id="app">
         <div class="container">
+            <!-- Component author -->
             <author @query-docs="search"></author>
+            <!-- Component navigation -->
             <navigation :nb-docs="nbDocs" @filter-type-doc="filterDocs"></navigation>
             <div class="row">
                 <div class="col">
+                    <!-- Alert: the API is loading -->
+                    <div class="alert alert-info mt-3" role="alert" v-show="nbDocs.all === 0">
+                        En cours de chargement…
+                    </div>
+                    <!-- Alert: query unsuccessful -->
+                    <div class="alert alert-danger mt-3" role="alert" v-show="selectedDocs.length === 0 && isSearchInProgress">
+                        Aucun document ne correspond à vos critères de recherche.
+                    </div>
+                    <!-- Component references -->
                     <references :docs="selectedDocs" :pub-dates="pubDates"></references>
                 </div>
             </div>
+            <p class="text-right text-muted"><small>Propulsé par galaHAL</small></p>
         </div>
     </div>
     <script src="assets/vuejs/vue.min.js"></script>

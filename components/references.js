@@ -40,6 +40,7 @@ let refCmpnt = {
                 let producedYear = this.docs[i].producedDate_tdate.match(/^[0-9]{4}/)[0];
                 references[producedYear].push(this.docs[i]);
             }
+            this.isEmpty = false;
             // Returns the references sorted by produced year
             return this.sortDocsByDate(references);
         }

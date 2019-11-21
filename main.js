@@ -17,7 +17,8 @@ let app = new Vue({
             comm: 0,
             douv: 0,
             other: 0
-        }
+        },
+        isSearchInProgress: false
     },
     components: {
         'author': authorCmpnt,
@@ -117,6 +118,8 @@ let app = new Vue({
         *   @param {String} keyword: the keyword to search in the docs
         */
         search: function(keyword) {
+            // A search is in progress?
+            this.isSearchInProgress = (keyword.length === 0) ? false : true;
             // Limits the search to the documents filtered by type
             this.filterDocs(this.selectedDocType);
             // Keyword to lowercase
