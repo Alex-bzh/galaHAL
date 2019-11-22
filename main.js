@@ -21,6 +21,7 @@ let app = new Vue({
         isSearchInProgress: false
     },
     components: {
+        'alert': alertCmpnt,
         'author': authorCmpnt,
         'navigation': navCmpnt,
         'references': refCmpnt

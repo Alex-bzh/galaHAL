@@ -17,13 +17,9 @@
             <div class="row">
                 <div class="col">
                     <!-- Alert: the API is loading -->
-                    <div class="alert alert-info mt-3" role="alert" v-show="nbDocs.all === 0">
-                        En cours de chargement…
-                    </div>
+                    <alert message="En cours de chargement…" v-if="nbDocs.all === 0"></alert>
                     <!-- Alert: query unsuccessful -->
-                    <div class="alert alert-danger mt-3" role="alert" v-show="selectedDocs.length === 0 && isSearchInProgress">
-                        Aucun document ne correspond à vos critères de recherche.
-                    </div>
+                    <alert message="Aucun document ne correspond à vos critères de recherche." v-if="selectedDocs.length === 0 && isSearchInProgress" type="danger"></alert>
                     <!-- Component references -->
                     <references :docs="selectedDocs" :pub-dates="pubDates"></references>
                 </div>
@@ -36,6 +32,7 @@
     <script src="assets/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>
     <script src="components/search.js"></script>
+    <script src="components/alert.js"></script>
     <script src="components/author.js"></script>
     <script src="components/navigation.js"></script>
     <script src="components/references.js"></script>
