@@ -18,3 +18,4 @@ galaHAL is easy to configure. The file *config.js* at the root contains a small 
 
 ## Coming features
 - direct access to documents when available
+- drupal and wordpress modules
