@@ -1,27 +1,26 @@
 // author.js
 let authorCmpnt = {
-	template: `
+    template: `
         <nav class="navbar navbar-light">
             <a class="navbar-brand" :href="halUrl" target="_blank">{{ author }}</a>
             <search @keyword="queryDocs"></search>
         </nav>
-	`,
+    `,
     components: {
         'search': searchCmpnt
-    }
-    ,
-	mounted: function() {
+    },
+    mounted: function() {
         // Fetches the details of an author
         this.fetchAuthor();
-	},
-	data: function() {
-		return {
-			idHal: config.idHal,
-			lab: config.lab,
-        	firstName: null,
-        	lastName: null
-		}
-	},
+    },
+    data: function() {
+        return {
+            idHal: config.idHal,
+            lab: config.lab,
+            firstName: null,
+            lastName: null
+        }
+    },
     computed: {
         /*
         *   An author is composed by a first name, a last name
@@ -46,8 +45,8 @@ let authorCmpnt = {
             return url + queryAuth + queryLab;
         }
     },
-	methods: {
-		/*
+    methods: {
+        /*
         *   Retrieves the first and last names of an author.
         */
         fetchAuthor: function() {
@@ -73,5 +72,5 @@ let authorCmpnt = {
             // An event called query-docs will look for the documents
             this.$emit('query-docs', keyword);
         }
-	}
+    }
 }
