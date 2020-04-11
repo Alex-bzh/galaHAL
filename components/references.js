@@ -18,6 +18,7 @@ let refCmpnt = {
                     <li v-for="doc in docs[1]" :key="doc.halId_s" class="text-justify">\
                         <a :href="`https://hal.archives-ouvertes.fr/${doc.halId_s}`" target="_blank">{{ doc.halId_s }}</a>\
                         <span>{{ decodeHtml(doc.label_s) }}</span>\
+                        <a class="align-middle" v-show="doc.fileMain_s" :href="doc.fileMain_s" target="_blank"><span class="oi oi-file"></span></a>\
                     </li>\
                 </ul>\
             </li>\
