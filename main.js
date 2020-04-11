@@ -41,7 +41,7 @@ let app = new Vue({
             // HAL API: bibliographical references
             let url = 'https://api.archives-ouvertes.fr/search/';
             // Builds the query
-            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,docType_s,label_s,producedDate_tdate&facet=true&facet.field=docType_s&rows=500&wt=json&sort=producedDate_tdate+desc`;
+            let query = `${this.lab}/?q=authIdHal_s:${this.idHal}&fl=halId_s,docType_s,label_s,producedDate_tdate,fileMain_s&facet=true&facet.field=docType_s&rows=500&wt=json&sort=producedDate_tdate+desc`;
             // Fetch API to query the HAL API
             fetch(url + query)
                 .then(stream => stream.json())
